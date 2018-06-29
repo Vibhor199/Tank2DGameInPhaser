@@ -34,7 +34,7 @@ this.cursor = game.input.keyboard.createCursorKeys();
 
 // Create the player in the middle of the game
 this.player = game.add.sprite(70, 100, 'player');
-this.player1 = game.add.sprite(300, 150, 'player1');
+this.player1 = game.add.sprite(627, 108, 'player1');
         
 keyu = game.input.keyboard.addKey(Phaser.Keyboard.W);
 keyd = game.input.keyboard.addKey(Phaser.Keyboard.S);
@@ -48,19 +48,19 @@ this.walls = game.add.group();
 this.coins = game.add.group();
 this.enemies = game.add.group();
 //this.bullet=game.add.group();
-this.wepon = game.add.weapon(80, 'bullet');
-this.wepon1 = game.add.weapon(80, 'bullet');
+this.wepon = game.add.weapon(100, 'bullet');
+this.wepon1 = game.add.weapon(100, 'bullet');
 
     //  The 'rgblaser.png' is a Sprite Sheet with 80 frames in it (each 4x4 px in size)
     //  The 3rd argument tells the Weapon Plugin to advance to the next frame each time
     //  a bullet is fired, when it hits 80 it'll wrap to zero again.
     //  You can also set this via this.weapon.bulletFrameCycle = true
     
-        this.wepon1.setBulletFrames(0, 80, true);
+        this.wepon1.setBulletFrames(0, 100, true);
 this.wepon1.bulletKillType = Phaser.Weapon.KILL_LIFESPAN;
     this.wepon1.bulletLifespan=1000;
-   this.wepon1.bulletSpeed = 600;
-this.wepon1.fireRate = 80;
+   this.wepon1.bulletSpeed = 20;
+this.wepon1.fireRate = 50;
 this.player1.anchor.set(0.5);
 
         
@@ -81,16 +81,16 @@ this.player1.anchor.set(0.5);
 
     fireButton1 = this.input.keyboard.addKey(Phaser.KeyCode.Q);
 
-this.wepon.setBulletFrames(0, 80, true);
+	this.wepon.setBulletFrames(0, 100, true);
    
     this.wepon.bulletKillType = Phaser.Weapon.KILL_LIFESPAN;
-    this.wepon.bulletLifespan=1000;
+    this.wepon.bulletLifespan=6000;
     //  The speed at which the bullet is fired
     
-    this.wepon.bulletSpeed = 400;
+    this.wepon.bulletSpeed = 220;
 
     //  Speed-up the rate of fire, allowing them to shoot 1 bullet every 50ms
-    this.wepon.fireRate = 80;
+    this.wepon.fireRate = 50;
     
     //  Wrap bullets around the world bounds to the opposite side
     // weapon.bulletWorldWrap = true;
@@ -115,28 +115,33 @@ this.wepon.setBulletFrames(0, 80, true);
     
 // Design the level. x = wall, o = coin, ! = lava.
 var level = [
-    'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-    'x                    xx            xx         x',
-    'x                                  xx         x',
-    'x         xx                       xx         x',
-    'x   xxxxxxxxxxxxxxxxxxxxxxxx   xxxxxxxxx   xxxx',
-    'x                  xxxxxxxxx   xxxxxxxxx   xxxx',
-    'x                  xxxxxxxxx   xxxxxxxxx   xxxx',
-    'x                  xxxxxxxxx   xxxxxxxxx   xxxx',
-    'x   xxxxxxxxxxxx                           xxxx',
-    'x   xxxxxxxxxxxx                           xxxx',
-    'x                  xxxxxx   xxxxxxxxxxxx   xxxx',
-    'x                  xxxxxx   xxxxxxxxxxxx   xxxx',
-    'x                  xxxxxx   xxxxxxxxxxxx   xxxx',
-    'x       xx         xxxxxx   xxxxxxxxxxxx   xxxx',
-    'x   xxxxxxxx   xxxxxxxxxx        xx        xxxx',
-    'x   xxxxxxxx   xxxxxxxxxx                  xxxx',
-    'x   xxxxxxxx   xxxxxxxxxx              xx  xxxx',
-    'x   xxxxxxxx   xxxxxxxxxxxxxxx        xxxxxxxxx',
-    'x                 xx                 xxxxxxxxxx',
-    'x                                   xxxxxxxxxxx',
-    'x      xx                     xxxxxxxxxxxxxxxxx',
-    'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    '***********************************************',
+    '*                                             *',
+    '*                                             *',
+    '*            *',
+    '*      *****     ***** ',
+    '*      ******                      *****',
+    '*  *                                   ',
+    '*  *                                   *',
+    '*  *                                    ',
+    '*  *************                          ',
+    '*  **************************************',
+    '*  ',
+    '*                                             *',
+    '*                                             *',
+    '*  ',
+    '*   *',
+    '*                     *',
+    '*         *',
+    '*          *',
+    '*  **********        *',
+    '*          *',
+    '*          *',
+    '*         ***************************** *',
+    '*          *',
+    '*                                             *',
+    '*                                             *',
+    '***********************************************',
     ];
 
 
@@ -148,7 +153,7 @@ for (var i = 0; i < level.length; i++) {
     for (var j = 0; j < level[i].length; j++) {
 
         // Create a wall and add it to the 'walls' group
-        if (level[i][j] == 'x') {
+        if (level[i][j] == '*') {
             var wall = game.add.sprite(30+20*j, 30+20*i, 'wall');
             this.walls.add(wall);
             wall.body.immovable = true; 
@@ -171,172 +176,73 @@ for (var i = 0; i < level.length; i++) {
 
     update: function() {
         
-        if (fireButton1.isDown) {
+        if (fireButton1.isDown && this.player1.alive) {
             this.wepon1.fire();
             this.jumpSound.play(); 
         }
-        if (fireButton.isDown) {
+        if (fireButton.isDown && this.player.alive) {
             this.wepon.fire();
             this.jumpSound.play(); 
         }
+		this.player1.body.velocity.x=0;
+		this.player1.body.velocity.y=0;
+		this.player.body.velocity.x=0;
+        this.player.body.velocity.x=0;
+        this.player.body.angularVelocity=0;    
         
-    
-        /*if (keyu.isDown) 
-            this.player1.body.velocity.y = -200;
-        else if (keyd.isDown) 
-            this.player1.body.velocity.y = 200;
-        else
-            this.player1.body.velocity.y=0;
-
-        if (keyl.isDown) 
-        this.player1.body.velocity.x = -200;
-        else if (keyr.isDown) 
-            this.player1.body.velocity.x = 200;
-            else
-          this.player1.body.velocity.x=0;
-        */
-        // Move the player when an arrow key is pressed
         if (keyl.isDown) {
-  //  this.player.body.velocity.x = -200;
-//    f(direction == 1) { 
-
-            this.player1.body.fixedRotation = false;
-            rot1=rot1+90;
-                    rot1=rot1%360;
-            //this.player.body.angle = 90; 
-            this.player1.angle= rot1;
-            this.player1.body.fixedRotation = true;
+			this.player1.body.angularVelocity=-200;
 
 
         }
         else if (keyr.isDown) {            
-            //    this.player.body.velocity.x = 200;
-            this.player1.body.fixedRotation = false;
-            rot1=rot1-90;
-                  if(rot1<0)
-                    rot1=360+rot1;
-                    //rot=rot%360;
-            //this.player.body.angle = 90; 
-            this.player1.angle= rot1;
-            this.player1.body.fixedRotation = true;
-
+            this.player1.body.angularVelocity=200;
 
 
 
         }
         
-        else this.player1.body.velocity.x = 0;
-
-            // Make the player jump if he is touching the ground
+        else this.player1.body.angularVelocity = 0;
         if (keyu.isDown) {
         
-        
-            if(rot1==0) this.player1.body.velocity.x = 200;
-            else if(rot1==90) this.player1.body.velocity.y = 200;
-            else if(rot1==180) this.player1.body.velocity.x = -200;
-            else if(rot1==270) this.player1.body.velocity.y = -200;
-
-        } else if (keyd.isDown) {
-    //this.player.body.velocity.y = 200;
-            if(rot1==0) this.player1.body.velocity.x = -200;
-            else if(rot1==90) this.player1.body.velocity.y = -200;
-            else if(rot1==180) this.player1.body.velocity.x = 200;
-            else if(rot1==270) this.player1.body.velocity.y = 200;
-
-        
+		 game.physics.arcade.velocityFromAngle(this.player1.angle, 150, this.player1.body.velocity);
         }
-        
-        else this.player1.body.velocity.y = 0;
-
-            
-            
-    
-        
-        
-// Move the player when an arrow key is pressed
+		else
+			game.physics.arcade.velocityFromAngle(this.player1.angle, 0, this.player1.body.velocity);
         if (this.cursor.left.isDown)
             {
-          //  this.player.body.velocity.x = -200;
-        //    f(direction == 1) { 
-
-        this.player.body.fixedRotation = false;
-        rot=rot+90;
-                rot=rot%360;
-        //this.player.body.angle = 90; 
-        this.player.angle= rot;
-        this.player.body.fixedRotation = true;
-
+         
+				this.player.body.angularVelocity=-200;
 
             }
-                else if (this.cursor.right.isDown) 
+        else if (this.cursor.right.isDown) 
         {            
-        //    this.player.body.velocity.x = 200;
-        this.player.body.fixedRotation = false;
-        rot=rot-90;
-              if(rot<0)
-                rot=360+rot;
-                //rot=rot%360;
-        //this.player.body.angle = 90; 
-        this.player.angle= rot;
-        this.player.body.fixedRotation = true;
-
-
-
+         	this.player.body.angularVelocity=200;
 
         }
 
-                else 
-            this.player.body.velocity.x = 0;
+        else 
+            this.player.body.angularVelocity = 0;
 
-        // Make the player jump if he is touching the ground
+  
         if (this.cursor.up.isDown)
-            {
-
-
-                if(rot==0)
-            this.player.body.velocity.x = 200;
-                else if(rot==90)
-            this.player.body.velocity.y = 200;
-                else if(rot==180)
-            this.player.body.velocity.x = -200;
-                else if(rot==270)
-            this.player.body.velocity.y = -200;
-
-
-
-
-            }else if (this.cursor.down.isDown)
-                {
-            //this.player.body.velocity.y = 200;
-                        if(rot==0)
-            this.player.body.velocity.x = -200;
-                else if(rot==90)
-            this.player.body.velocity.y = -200;
-                else if(rot==180)
-            this.player.body.velocity.x = 200;
-                else if(rot==270)
-            this.player.body.velocity.y = 200;
-
-
-                }
-
-                else 
-            this.player.body.velocity.y = 0;
-
-        // Make the player and the walls collide
-        game.physics.arcade.collide(this.player, this.walls);
+        {
+			game.physics.arcade.velocityFromAngle(this.player.angle, 150, this.player.body.velocity);
+        }
+		else
+			game.physics.arcade.velocityFromAngle(this.player.angle, 0, this.player.body.velocity);
+	    game.physics.arcade.collide(this.player, this.walls);
         game.physics.arcade.collide(this.player1, this.walls);
         game.physics.arcade.collide(this.player1, this.player);
         game.physics.arcade.collide(this.wepon.bullets, this.walls);
         game.physics.arcade.collide(this.wepon1.bullets, this.walls);
 
 
-        // Call the 'takeCoin' function when the player takes a coin
+        
         game.physics.arcade.overlap(this.player1, this.wepon.bullets, this.takeCoin, null, this);
         game.physics.arcade.overlap(this.player, this.wepon1.bullets, this.takeCoin1, null, this);
 
-        // Call the 'restart' function when the player touches the enemy
-        //game.physics.arcade.overlap(this.player, this.enemies, this.restart, null, this);
+        
     },
 
 
@@ -359,6 +265,18 @@ restart: function() {
     render: function()
     {
     this.wepon.debug();
+		game.debug.spriteInfo(this.player1, 32, 32);
+    game.debug.text('angularVelocity: ' + this.player1.body.angularVelocity, 32, 200);
+    game.debug.text('angularAcceleration: ' + this.player1.body.angularAcceleration, 32, 232);
+    game.debug.text('angularDrag: ' + this.player1.body.angularDrag, 32, 264);
+    game.debug.text('deltaZ: ' + this.player1.body.deltaZ(), 32, 296);
+			game.debug.spriteInfo(this.player, 32, 32);
+    game.debug.text('angularVelocity: ' + this.player.body.angularVelocity, 32, 200);
+    game.debug.text('angularAcceleration: ' + this.player.body.angularAcceleration, 32, 232);
+    game.debug.text('angularDrag: ' + this.player.body.angularDrag, 32, 264);
+    game.debug.text('deltaZ: ' + this.player.body.deltaZ(), 32, 296);
+
+
         
 },
 };
